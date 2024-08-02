@@ -1,6 +1,6 @@
 # Set the desired Python version and architecture
-$pythonVersion = "3.8.10"
-$architecture = "amd64"  # Use "amd64" for 64-bit or "win32" for 32-bit
+$pythonVersion = {{pythonVersion}}
+$architecture = {{architecture}}  # Use "amd64" for 64-bit or "win32" for 32-bit
 
 # Set the download URL and file name
 $pythonInstallerUrl = "https://www.python.org/ftp/python/$pythonVersion/python-$pythonVersion-$architecture.exe"
