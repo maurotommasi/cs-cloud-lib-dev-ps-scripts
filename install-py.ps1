@@ -1,40 +1,37 @@
-# Define the version of Python you want to install
-$pythonVersion = {{python_version}}
+# Set the desired Python version and architecture
+$pythonVersion = "3.8.10"
+$architecture = "amd64"  # Use "amd64" for 64-bit or "win32" for 32-bit
 
-# Function to check if Chocolatey is installed
-function Is-ChocolateyInstalled {
-    try {
-        Get-Command choco -ErrorAction Stop | Out-Null
-        return $true
-    }
-    catch {
-        return $false
-    }
-}
+# Set the download URL and file name
+$pythonInstallerUrl = "https://www.python.org/ftp/python/$pythonVersion/python-$pythonVersion-$architecture.exe"
+$installerFileName = "python-$pythonVersion-$architecture.exe"
 
-# Function to install Chocolatey
-function Install-Chocolatey {
-    Write-Output "Installing Chocolatey..."
-    Set-ExecutionPolicy Bypass -Scope Process -Force; 
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
-    iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-}
+# Set the download directory
+$downloadDirectory = "$env:USERPROFILE\Downloads"
 
-# Check if Chocolatey is installed
-if (-not (Is-ChocolateyInstalled)) {
-    Install-Chocolatey
-}
+# Full path to the installer
+$installerFilePath = Join-Path -Path $downloadDirectory -ChildPath $installerFileName
 
-# Refresh environment variables to ensure Chocolatey is available
-& cmd /c refreshenv
+# Download the installer
+Write-Host "Downloading Python $pythonVersion..." -ForegroundColor Green
+Invoke-WebRequest -Uri $pythonInstallerUrl -OutFile $installerFilePath
 
-# Install the specific version of Python
-Write-Output "Installing Python $pythonVersion..."
-choco install python --version $pythonVersion -y
+# Run the installer silently
+Write-Host "Installing Python $pythonVersion..." -ForegroundColor Green
+Start-Process -FilePath $installerFilePath -ArgumentList "/quiet", "InstallAllUsers=1", "PrependPath=1" -Wait
 
-# Verify the installation
-Write-Output "Verifying Python installation..."
+# Verify installation
+Write-Host "Verifying Python installation..." -ForegroundColor Green
 $pythonPath = (Get-Command python).Source
-$pythonInstalledVersion = & $pythonPath --version
+$installedVersion = & python --version
 
-Write-Output "Installed Python version: $pythonInstalledVersion"
+if ($installedVersion) {
+    Write-Host "Python successfully installed at: $pythonPath" -ForegroundColor Green
+    Write-Host "Installed version: $installedVersion" -ForegroundColor Green
+} else {
+    Write-Host "Python installation failed." -ForegroundColor Red
+}
+
+# Cleanup: Remove the installer
+Remove-Item -Path $installerFilePath -Force
+Write-Host "Cleanup completed." -ForegroundColor Green
