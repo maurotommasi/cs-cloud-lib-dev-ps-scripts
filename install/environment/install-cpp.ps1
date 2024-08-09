@@ -1,6 +1,8 @@
-# Define the specific version and architecture
-$mingwVersion = {{mingwVersion}} # Set your desired MinGW-w64 version here
-$mingwArch = {{mingwArch}}    # Set your desired architecture (x86_64 for 64-bit, i686 for 32-bit)
+# Define the parameters
+param (
+    [string]$mingwVersion = "10.0.0",   # Default MinGW-w64 version
+    [string]$mingwArch = "x86_64"       # Default architecture
+)
 
 # Construct the URL for the MinGW-w64 installer
 $baseUrl = "https://sourceforge.net/projects/mingw-w64/files/mingw-w64"

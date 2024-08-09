@@ -1,21 +1,20 @@
-# Define the specific version and architecture
-$phpVersion = {{phpVersion}}   # Set your desired PHP version here
-$phpArch = {{phpArch}}       # Set your desired architecture (x64 or x86)
-$phpThreadSafe = {{phpThreadSafe}} # Choose "thread-safe" or "non-thread-safe"
+# Define the parameters
+param (
+    [string]$phpVersion = "8.1.0",           # Default PHP version
+    [string]$phpArch = "x64",                # Default architecture (x64 or x86)
+    [string]$phpThreadSafe = "thread-safe"   # Default thread safety (thread-safe or non-thread-safe)
+)
 
 # Construct the URL for the specified version and architecture
 $baseUrl = "https://windows.php.net/downloads/releases"
-$installerFileName = "php-$phpVersion-Win32-vs16-$phpArch.zip"
-$downloadPath = "$env:TEMP\$installerFileName"
-$installDir = "C:\php"
-
-# Determine thread-safe or non-thread-safe
 if ($phpThreadSafe -eq "thread-safe") {
-    $phpUrl = "$baseUrl/archives/$installerFileName"
+    $installerFileName = "php-$phpVersion-Win32-vs16-$phpArch.zip"
 } else {
     $installerFileName = "php-$phpVersion-nts-Win32-vs16-$phpArch.zip"
-    $phpUrl = "$baseUrl/archives/$installerFileName"
 }
+$phpUrl = "$baseUrl/archives/$installerFileName"
+$downloadPath = "$env:TEMP\$installerFileName"
+$installDir = "C:\php"
 
 # Download the PHP zip file
 Write-Host "Downloading PHP $phpVersion for $phpArch ($phpThreadSafe)..."

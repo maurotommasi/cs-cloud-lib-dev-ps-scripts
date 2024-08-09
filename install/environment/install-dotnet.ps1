@@ -1,6 +1,8 @@
-# Define the specific version and architecture
-$dotnetVersion = {{dotnetVersion}}  # Set your desired .NET version here
-$dotnetArch = {{dotnetVersion}}       # Set your desired architecture (x64 or x86)
+# Define the parameters
+param (
+    [string]$dotnetVersion = "7.0.0",  # Default .NET version
+    [string]$dotnetArch = "x64"        # Default architecture
+)
 
 # Construct the URL for the .NET SDK installer
 $baseUrl = "https://dotnetcli.azureedge.net/dotnet/Sdk"

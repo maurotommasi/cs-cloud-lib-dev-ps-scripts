@@ -1,6 +1,8 @@
-# Define the specific version and architecture
-$javaVersion = {{javaVersion}} # Set your desired Java version here
-$javaArch = {{javaArch}} # Set your desired architecture (windows-x64 or windows-x86)
+# Define the parameters
+param (
+    [string]$javaVersion = "17.0.0",  # Default Java version
+    [string]$javaArch = "windows-x64" # Default architecture
+)
 
 # Construct the URL for the specified version and architecture
 $baseUrl = "https://download.oracle.com/java"
